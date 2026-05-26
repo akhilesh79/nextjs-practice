@@ -4,7 +4,15 @@ export const metadata = {
   title: 'Products',
 };
 
+const random = (count: number) => {
+  return Math.floor(Math.random() * count);
+};
+
 export default function Products() {
+  const num = random(2);
+  if (num == 1) {
+    throw new Error('Failed to load products');
+  }
   return (
     <>
       <div className='p-4'>Products Page</div>
