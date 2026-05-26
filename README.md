@@ -48,6 +48,8 @@ src/app/
     ├── articles/
     │   ├── page.tsx
     │   └── [articleId]/page.tsx  # Dynamic route
+    ├── order-product/
+    │   └── page.tsx              # Client component using useRouter
     └── docs/
         └── [[...slug]]/          # Optional catch-all route
             ├── page.tsx
@@ -65,8 +67,10 @@ src/app/
 - Set up shared metadata (title template + description) in each layout.
 - Configured **Tailwind CSS v4** via PostCSS (`@import "tailwindcss"` in `global.css`).
 - Built an auth `Navbar` component reused across the `(auth)` group.
+- Migrated the `(user)` layout and pages from inline styles to **Tailwind utility classes**.
+- Added an `order-product` page demonstrating **programmatic navigation** via `useRouter()` in a Client Component.
 
 ## Notes
 
 - Tailwind v4 uses a single `@import "tailwindcss";` entrypoint — the old `base`/`components`/`utilities` imports are no longer exported.
-- The `(user)` layout currently uses inline styles; the `(auth)` layout uses Tailwind classes.
+- In **Server Components**, route `params` and `searchParams` arrive as Promises and must be awaited. In **Client Components**, use the `use()` hook to unwrap them.

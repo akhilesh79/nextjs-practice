@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import '../global.css';
 
 export const metadata: Metadata = {
   title: {
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
 export default function UserLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-      <body style={{ fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }}>
-        <header style={{ backgroundColor: '#f0f0f0', padding: '1rem' }}>
+      <body className='font-sans m-0 p-0'>
+        <header className='bg-gray-800 text-white p-4'>
           <h1>My App</h1>
         </header>
         {children}
-        <footer style={{ backgroundColor: '#f0f0f0', padding: '1rem', marginTop: '2rem' }}>
+        <footer className='bg-gray-200 p-4 mt-8'>
           <p>&copy; 2023 My App. All rights reserved.</p>
         </footer>
       </body>

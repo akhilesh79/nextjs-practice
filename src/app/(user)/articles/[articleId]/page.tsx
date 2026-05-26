@@ -7,7 +7,7 @@ export default async function ArticleDetails({
   params: Promise<{ articleId: string }>;
   searchParams: Promise<{ lang?: string }>;
 }) {
-  const { articleId } = await params;
+  const { articleId } = await params; // in client component we can use "use" hook to get the params and searchParams but in server component we have to get it from the props
   const { lang } = await searchParams;
   return (
     <div>
@@ -16,11 +16,11 @@ export default async function ArticleDetails({
       <p>Language: {lang}</p>
       {/* if same article want to see in other languages  */}
       <p>View in other languages:</p>
-      <ul>
-        <li>
+      <ul className='list-disc list-inside'>
+        <li className='mb-2 hover:text-blue-500 hover:underline'>
           <Link href={`/articles/${articleId}?lang=english`}>English</Link>
         </li>
-        <li>
+        <li className='mb-2 hover:text-blue-500 hover:underline'>
           <Link href={`/articles/${articleId}?lang=french`}>French</Link>
         </li>
       </ul>

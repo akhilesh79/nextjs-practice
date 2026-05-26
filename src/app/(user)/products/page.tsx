@@ -6,22 +6,22 @@ export const metadata = {
 
 export default function Products() {
   return (
-    <div>
-      <Link href='/' style={{ padding: '0.5rem' }}>
+    <>
+      <div className='p-4'>Products Page</div>
+      <Link href='/' className='bg-gray-300 text-black p-2 m-2 rounded'>
         Home
       </Link>
-      <h5>Products Page</h5>
-      <ul>
-        <li>
+      <ul className='list-disc list-inside mt-4'>
+        <li className='mb-2 hover:text-blue-500'>
           <Link href='/products/1'>Product 1</Link>
         </li>
-        <li>
+        <li className='mb-2 hover:text-blue-500'>
           <Link href='/products/2'>Product 2</Link>
         </li>
-        <li>
+        <li className='mb-2 hover:text-blue-500'>
           <Link href='/products/3'>Product 3</Link>
         </li>
       </ul>
-    </div>
+    </>
   );
 }
