@@ -33,26 +33,37 @@ src/app/
 ├── not-found.tsx                 # Global 404 page
 ├── _private/                     # Private folder (excluded from routing)
 │   └── page.tsx
+├── _components/                  # Shared, non-route components
+│   └── loader.tsx                # Reusable inline loader (spinner + label)
 ├── (auth)/                       # Route group: auth pages share a layout
 │   ├── layout.tsx                # Layout with Navbar + footer (Tailwind styled)
+│   ├── loading.tsx               # Suspense fallback for auth segment
 │   ├── navbar.tsx
 │   ├── login/page.tsx
 │   ├── register/page.tsx
 │   └── forgot-password/page.tsx
 └── (user)/                       # Route group: user-facing pages
-    ├── layout.tsx                # Layout with header + footer (inline styled)
+    ├── layout.tsx                # Layout with header + footer (Tailwind styled)
+    ├── loading.tsx               # Suspense fallback for (user) root
     ├── page.tsx                  # Home page
     ├── products/
     │   ├── page.tsx
-    │   └── [productId]/page.tsx  # Dynamic route
+    │   ├── loading.tsx
+    │   └── [productId]/
+    │       ├── page.tsx          # Dynamic route
+    │       └── loading.tsx
     ├── articles/
     │   ├── page.tsx
-    │   └── [articleId]/page.tsx  # Dynamic route
+    │   ├── loading.tsx
+    │   └── [articleId]/
+    │       ├── page.tsx          # Dynamic route
+    │       └── loading.tsx
     ├── order-product/
     │   └── page.tsx              # Client component using useRouter
     └── docs/
         └── [[...slug]]/          # Optional catch-all route
             ├── page.tsx
+            ├── loading.tsx
             └── not-found.tsx
 ```
 
@@ -69,8 +80,12 @@ src/app/
 - Built an auth `Navbar` component reused across the `(auth)` group.
 - Migrated the `(user)` layout and pages from inline styles to **Tailwind utility classes**.
 - Added an `order-product` page demonstrating **programmatic navigation** via `useRouter()` in a Client Component.
+- Added **`loading.tsx`** files at each route segment for streamed Suspense fallbacks during navigation.
+- Built a shared **`<Loader />`** in `_components/loader.tsx` (inline spinner) reused by every `loading.tsx`, so only the page slot swaps while the shared layout (header/footer) stays mounted and interactive.
 
 ## Notes
 
 - Tailwind v4 uses a single `@import "tailwindcss";` entrypoint — the old `base`/`components`/`utilities` imports are no longer exported.
 - In **Server Components**, route `params` and `searchParams` arrive as Promises and must be awaited. In **Client Components**, use the `use()` hook to unwrap them.
+- `loading.tsx` is wrapped automatically in a React `<Suspense>` boundary by Next.js — no manual `<Suspense>` needed for route-level loading states.
+- Next.js performs **automatic route-based code splitting**: only the chunks for the current route are shipped on initial load; `<Link>` prefetches destination chunks in the background. Use `next/dynamic` for component-level lazy loading inside a route.
