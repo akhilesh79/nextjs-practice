@@ -83,7 +83,9 @@ src/app/
 - Added an `order-product` page demonstrating **programmatic navigation** via `useRouter()` in a Client Component.
 - Added **`loading.tsx`** files at each route segment for streamed Suspense fallbacks during navigation.
 - Built a shared **`<Loader />`** in `_components/loader.tsx` (inline spinner) reused by every `loading.tsx`, so only the page slot swaps while the shared layout (header/footer) stays mounted and interactive.
-- Added an **`error.tsx`** boundary for the `(user)` group — catches runtime errors in any nested page and renders a fallback UI with a "Go Back" action, isolating failures to that subtree.
+- Added an **`error.tsx`** boundary for the `(user)` group — catches runtime errors in any nested page and renders a fallback UI with **Try Again** and **Go Back** actions, isolating failures to that subtree.
+- **Try Again** uses the `reset` prop from Next.js together with `router.refresh()` inside `startTransition` to re-render the failed segment without a full page reload.
+- Simulated a server error in `/products` (random `throw new Error(...)`) to exercise the error boundary end-to-end.
 
 ## Notes
 
@@ -91,4 +93,5 @@ src/app/
 - In **Server Components**, route `params` and `searchParams` arrive as Promises and must be awaited. In **Client Components**, use the `use()` hook to unwrap them.
 - `loading.tsx` is wrapped automatically in a React `<Suspense>` boundary by Next.js — no manual `<Suspense>` needed for route-level loading states.
 - `error.tsx` must be a Client Component (`'use client'`); Next.js wraps the segment in a React error boundary and renders this file's fallback when an error is thrown below it.
+- Next.js passes two props to `error.tsx`: `error` (the thrown error) and `reset` (a function that re-renders the segment). Wrapping `router.refresh() + reset()` in `startTransition` retries server-rendered content without losing client state elsewhere on the page.
 - Next.js performs **automatic route-based code splitting**: only the chunks for the current route are shipped on initial load; `<Link>` prefetches destination chunks in the background. Use `next/dynamic` for component-level lazy loading inside a route.
