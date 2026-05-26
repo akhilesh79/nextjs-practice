@@ -45,6 +45,7 @@ src/app/
 └── (user)/                       # Route group: user-facing pages
     ├── layout.tsx                # Layout with header + footer (Tailwind styled)
     ├── loading.tsx               # Suspense fallback for (user) root
+    ├── error.tsx                 # Error boundary for the (user) subtree
     ├── page.tsx                  # Home page
     ├── products/
     │   ├── page.tsx
@@ -82,10 +83,12 @@ src/app/
 - Added an `order-product` page demonstrating **programmatic navigation** via `useRouter()` in a Client Component.
 - Added **`loading.tsx`** files at each route segment for streamed Suspense fallbacks during navigation.
 - Built a shared **`<Loader />`** in `_components/loader.tsx` (inline spinner) reused by every `loading.tsx`, so only the page slot swaps while the shared layout (header/footer) stays mounted and interactive.
+- Added an **`error.tsx`** boundary for the `(user)` group — catches runtime errors in any nested page and renders a fallback UI with a "Go Back" action, isolating failures to that subtree.
 
 ## Notes
 
 - Tailwind v4 uses a single `@import "tailwindcss";` entrypoint — the old `base`/`components`/`utilities` imports are no longer exported.
 - In **Server Components**, route `params` and `searchParams` arrive as Promises and must be awaited. In **Client Components**, use the `use()` hook to unwrap them.
 - `loading.tsx` is wrapped automatically in a React `<Suspense>` boundary by Next.js — no manual `<Suspense>` needed for route-level loading states.
+- `error.tsx` must be a Client Component (`'use client'`); Next.js wraps the segment in a React error boundary and renders this file's fallback when an error is thrown below it.
 - Next.js performs **automatic route-based code splitting**: only the chunks for the current route are shipped on initial load; `<Link>` prefetches destination chunks in the background. Use `next/dynamic` for component-level lazy loading inside a route.
