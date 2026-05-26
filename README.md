@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Practice
+
+A practice project exploring the Next.js 16 App Router, route groups, dynamic & catch-all segments, and Tailwind CSS v4.
+
+## Tech Stack
+
+- **Next.js** 16.2.6 (App Router + Turbopack)
+- **React** 19.2.4
+- **TypeScript** 5
+- **Tailwind CSS** v4 (via `@tailwindcss/postcss`)
+- **ESLint** 9 with `eslint-config-next`
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — start the dev server (Turbopack)
+- `npm run build` — production build
+- `npm run start` — run the production build
+- `npm run lint` — run ESLint
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/app/
+├── global.css                    # Tailwind v4 entrypoint (@import "tailwindcss")
+├── not-found.tsx                 # Global 404 page
+├── _private/                     # Private folder (excluded from routing)
+│   └── page.tsx
+├── (auth)/                       # Route group: auth pages share a layout
+│   ├── layout.tsx                # Layout with Navbar + footer (Tailwind styled)
+│   ├── navbar.tsx
+│   ├── login/page.tsx
+│   ├── register/page.tsx
+│   └── forgot-password/page.tsx
+└── (user)/                       # Route group: user-facing pages
+    ├── layout.tsx                # Layout with header + footer (inline styled)
+    ├── page.tsx                  # Home page
+    ├── products/
+    │   ├── page.tsx
+    │   └── [productId]/page.tsx  # Dynamic route
+    ├── articles/
+    │   ├── page.tsx
+    │   └── [articleId]/page.tsx  # Dynamic route
+    └── docs/
+        └── [[...slug]]/          # Optional catch-all route
+            ├── page.tsx
+            └── not-found.tsx
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Completed So Far
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Bootstrapped Next.js 16 project with the App Router.
+- Organized routes using **route groups** `(auth)` and `(user)` so each section can have its own layout without affecting the URL.
+- Added **dynamic segments**: `/products/[productId]`, `/articles/[articleId]`.
+- Added an **optional catch-all segment**: `/docs/[[...slug]]` with a scoped `not-found.tsx`.
+- Added a **global** `not-found.tsx` for unmatched routes.
+- Demonstrated **private folders** with `_private/` (not exposed as a route).
+- Set up shared metadata (title template + description) in each layout.
+- Configured **Tailwind CSS v4** via PostCSS (`@import "tailwindcss"` in `global.css`).
+- Built an auth `Navbar` component reused across the `(auth)` group.
 
-## Deploy on Vercel
+## Notes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Tailwind v4 uses a single `@import "tailwindcss";` entrypoint — the old `base`/`components`/`utilities` imports are no longer exported.
+- The `(user)` layout currently uses inline styles; the `(auth)` layout uses Tailwind classes.
